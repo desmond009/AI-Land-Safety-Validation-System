@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {"name": "Gov Zone A"},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[77.6020, 12.9790], [77.6030, 12.9790], [77.6030, 12.9800], [77.6020, 12.9800], [77.6020, 12.9790]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Restricted Campus B"},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[77.5959, 12.9718], [77.5965, 12.9718], [77.5965, 12.9723], [77.5959, 12.9723], [77.5959, 12.9718]]]
+      }
+    }
+  ]
+}

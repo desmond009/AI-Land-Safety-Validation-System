@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {"name": "Lake Alpha"},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[77.5935, 12.9705], [77.5955, 12.9705], [77.5955, 12.9725], [77.5935, 12.9725], [77.5935, 12.9705]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Canal Beta"},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[77.5885, 12.9685], [77.5898, 12.9685], [77.5898, 12.9696], [77.5885, 12.9696], [77.5885, 12.9685]]]
+      }
+    }
+  ]
+}

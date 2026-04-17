@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {"name": "Forest Patch One"},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[77.5970, 12.9630], [77.5990, 12.9630], [77.5990, 12.9650], [77.5970, 12.9650], [77.5970, 12.9630]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Forest Patch Two"},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[77.6040, 12.9675], [77.6060, 12.9675], [77.6060, 12.9690], [77.6040, 12.9690], [77.6040, 12.9675]]]
+      }
+    }
+  ]
+}
