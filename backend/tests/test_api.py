@@ -12,10 +12,10 @@ def test_high_risk_inside_water_and_near_restricted() -> None:
 
     assert response.status_code == 200
     payload = response.json()
-    assert payload["risk_level"] == "High"
+    assert payload["risk_level"] == "HIGH"
     assert payload["risk_score"] >= 70
-    assert "Inside water body" in payload["flags"]
-    assert "Final risk level is High" in payload["explanation"]
+    assert any(flag.startswith("Inside water body") for flag in payload["flags"])
+    assert "Final risk level is HIGH" in payload["explanation"]
 
 
 def test_medium_risk_inside_forest_zone() -> None:
@@ -27,9 +27,9 @@ def test_medium_risk_inside_forest_zone() -> None:
 
     assert response.status_code == 200
     payload = response.json()
-    assert payload["risk_level"] == "Medium"
+    assert payload["risk_level"] == "MEDIUM"
     assert 30 < payload["risk_score"] <= 70
-    assert "Inside forest zone" in payload["flags"]
+    assert any(flag.startswith("Inside forest zone") for flag in payload["flags"])
 
 
 def test_low_risk_far_from_sensitive_layers() -> None:
@@ -41,6 +41,6 @@ def test_low_risk_far_from_sensitive_layers() -> None:
 
     assert response.status_code == 200
     payload = response.json()
-    assert payload["risk_level"] == "Low"
+    assert payload["risk_level"] == "LOW"
     assert payload["risk_score"] <= 30
     assert payload["flags"] == []

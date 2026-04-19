@@ -84,6 +84,14 @@ pytest -q
 - Near restricted land: `+30`
 
 Classification:
-- `0-30`: Low
-- `31-70`: Medium
-- `71+`: High
+- `0-30`: LOW
+- `31-70`: MEDIUM
+- `71+`: HIGH
+
+## Frontend Features
+
+- Interactive map using Leaflet with location marker
+- GeoJSON overlays for water, forest, and restricted layers
+- Layer legend with KGIS-inspired categories
+- Risk dashboard card with score, flags, and explainable text
+- Download report as JSON

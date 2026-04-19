@@ -1,7 +1,7 @@
 const riskColors = {
-  Low: 'bg-low/20 text-low border-low/60',
-  Medium: 'bg-medium/20 text-medium border-medium/60',
-  High: 'bg-high/20 text-high border-high/60',
+  LOW: 'bg-low/20 text-low border-low/60',
+  MEDIUM: 'bg-medium/20 text-medium border-medium/60',
+  HIGH: 'bg-high/20 text-high border-high/60',
 };
 
 function LoadingPulse() {
@@ -47,7 +47,19 @@ export default function RiskCard({ result, loading, error }) {
     );
   }
 
-  const riskClass = riskColors[result.risk_level] ?? riskColors.Low;
+  const riskClass = riskColors[result.risk_level] ?? riskColors.LOW;
+
+  const downloadReport = () => {
+    const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'land-safety-report.json';
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="rounded-2xl border border-white/15 bg-slate-900/75 p-6 shadow-panel">
@@ -57,6 +69,14 @@ export default function RiskCard({ result, loading, error }) {
           {result.risk_level}
         </span>
       </div>
+
+      <button
+        type="button"
+        onClick={downloadReport}
+        className="mt-4 rounded-md border border-cyan-200/40 bg-cyan-200/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-cyan-100 transition hover:bg-cyan-200/20"
+      >
+        Download JSON Report
+      </button>
 
       <div className="mt-4 grid grid-cols-2 gap-3 text-sm text-slate-200">
         <div className="rounded-lg bg-slate-800/65 p-3">
