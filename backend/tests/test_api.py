@@ -1,4 +1,8 @@
+import os
+
 from fastapi.testclient import TestClient
+
+os.environ["KGIS_USE_LIVE"] = "false"
 
 from main import app
 

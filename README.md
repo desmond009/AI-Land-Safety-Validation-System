@@ -64,6 +64,33 @@ uvicorn main:app --reload --port 8000
 
 If a URL is unavailable, the loader automatically falls back to local files in `backend/data/`.
 
+### Live KGIS Auto Source (No Manual Links Required)
+
+The backend can load thematic layers directly from KGIS ArcGIS REST services:
+
+- Water: Hydrology lake/river polygons
+- Forest: Forest boundary and eco-sensitive boundary
+- Restricted: Notified forest boundary
+
+Control mode with:
+
+```bash
+export KGIS_USE_LIVE=true
+```
+
+For fully local deterministic runs (for example CI/tests):
+
+```bash
+export KGIS_USE_LIVE=false
+```
+
+To avoid startup blocking, layer preloading is disabled by default.
+Enable preload only when needed:
+
+```bash
+export PRELOAD_LAYERS=true
+```
+
 Sample request:
 
 ```bash

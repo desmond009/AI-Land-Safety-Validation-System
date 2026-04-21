@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import time
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -25,8 +26,17 @@ risk_engine = RiskEngine(loader)
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    loader.load_all()
-    logger.info("Loaded GIS layers: %s", ", ".join(loader.LAYER_FILES.keys()))
+    preload_layers = os.getenv("PRELOAD_LAYERS", "false").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+    if preload_layers:
+        loader.load_all()
+        logger.info("Loaded GIS layers: %s", ", ".join(loader.LAYER_FILES.keys()))
+    else:
+        logger.info("Layer preloading disabled; GIS layers will load lazily on first use")
     yield
 
 
