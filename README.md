@@ -44,6 +44,26 @@ API endpoints:
 - `GET /layers/restricted`
 - `GET /health`
 
+### External GitHub GeoJSON Sources (KGIS-Reference Mode)
+
+By default, the backend reads local files from `backend/data/`.
+To use external GeoJSON files (for example from GitHub raw URLs), set any of these environment variables before starting FastAPI:
+
+- `KGIS_WATER_GEOJSON_URL`
+- `KGIS_FOREST_GEOJSON_URL`
+- `KGIS_RESTRICTED_GEOJSON_URL`
+
+Example:
+
+```bash
+export KGIS_WATER_GEOJSON_URL="https://raw.githubusercontent.com/<owner>/<repo>/<branch>/water.geojson"
+export KGIS_FOREST_GEOJSON_URL="https://raw.githubusercontent.com/<owner>/<repo>/<branch>/forest.geojson"
+export KGIS_RESTRICTED_GEOJSON_URL="https://raw.githubusercontent.com/<owner>/<repo>/<branch>/restricted.geojson"
+uvicorn main:app --reload --port 8000
+```
+
+If a URL is unavailable, the loader automatically falls back to local files in `backend/data/`.
+
 Sample request:
 
 ```bash
@@ -87,6 +107,18 @@ Classification:
 - `0-30`: LOW
 - `31-70`: MEDIUM
 - `71+`: HIGH
+
+## Uploaded KGIS Boundary Datasets
+
+Your uploaded zip files are valid KGIS-style boundary references:
+
+- `State_Boundaries.json.zip` (1 feature)
+- `District_Boundaries.json.zip` (31 features)
+- `Taluk_Boundaries.json.zip` (271 features)
+- `AC_Boundaries.json.zip` (224 features)
+- `PC_Boundaries.json.zip` (28 features)
+
+These are administrative boundaries and can be used as context/reference layers. The current risk model still requires thematic layers for water, forest, and restricted land.
 
 ## Frontend Features
 
