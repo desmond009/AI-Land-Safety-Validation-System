@@ -5,6 +5,7 @@ import os
 import time
 from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import Any
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -61,6 +62,7 @@ class AnalyzeResponse(BaseModel):
     flags: list[str]
     explanation: str
     distance_summary_m: dict[str, float]
+    data_source: dict[str, Any]
 
 
 @app.middleware("http")
@@ -80,7 +82,12 @@ def health() -> dict:
 
 @app.post("/analyze-location", response_model=AnalyzeResponse)
 def analyze_location(payload: AnalyzeRequest) -> dict:
-    return risk_engine.analyze(payload.latitude, payload.longitude)
+    result = risk_engine.analyze(payload.latitude, payload.longitude)
+    result["data_source"] = {
+        name: loader.get_layer_meta(name)
+        for name in loader.LAYER_FILES
+    }
+    return result
 
 
 @app.get("/layers/{layer_name}")

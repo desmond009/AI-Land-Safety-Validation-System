@@ -18,6 +18,39 @@ const layerStyles = {
   restricted: { color: '#d93025', fillColor: '#d93025', fillOpacity: 0.28, weight: 2 },
 };
 
+const layerLabels = {
+  water: 'Water Body',
+  forest: 'Forest / Eco-sensitive Zone',
+  restricted: 'Government / Restricted Land',
+};
+
+// Mirror the backend field-priority logic so popup names stay consistent.
+const KGIS_NAME_FIELDS = {
+  water:      ['Lake_Pondname', 'WBNAME', 'name', 'NAME'],
+  forest:     ['ForestName', 'RangeName', 'Forest_type', 'name', 'NAME'],
+  restricted: ['FOREST_NAM', 'FL_STATUS', 'name', 'NAME'],
+};
+
+function getFeatureDisplayName(properties, layerType) {
+  const fields = KGIS_NAME_FIELDS[layerType] ?? ['name', 'NAME'];
+  for (const field of fields) {
+    const val = properties?.[field];
+    if (val && String(val).trim() && String(val).trim().toLowerCase() !== 'null') {
+      return String(val).trim();
+    }
+  }
+  const id = properties?.OBJECTID ?? properties?.OBJECTID_1 ?? properties?.KGISLake_PondID;
+  return id != null ? `Feature #${id}` : 'Unnamed feature';
+}
+
+function buildPopupHtml(feature, layerType) {
+  const label = layerLabels[layerType] ?? layerType;
+  const name  = getFeatureDisplayName(feature.properties, layerType);
+  return `<div style="font-family:sans-serif;font-size:13px;line-height:1.5">
+    <b style="color:#1e293b">${label}</b><br/>${name}
+  </div>`;
+}
+
 function RecenterMap({ position }) {
   const map = useMap();
 
@@ -28,7 +61,7 @@ function RecenterMap({ position }) {
   return null;
 }
 
-export default function MapView({ latitude, longitude, layers }) {
+export default function MapView({ latitude, longitude, layers, hasPin }) {
   const position = [latitude, longitude];
 
   return (
@@ -39,12 +72,23 @@ export default function MapView({ latitude, longitude, layers }) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Marker position={position}>
-          <Popup>Selected location</Popup>
-        </Marker>
+        {hasPin && (
+          <Marker position={position}>
+            <Popup>Selected location</Popup>
+          </Marker>
+        )}
 
         {Object.entries(layers).map(([name, geojson]) => (
-          <GeoJSON key={name} data={geojson} style={layerStyles[name]} />
+          <GeoJSON
+            key={name}
+            data={geojson}
+            style={layerStyles[name]}
+            onEachFeature={(feature, leafletLayer) => {
+              leafletLayer.bindPopup(buildPopupHtml(feature, name));
+              leafletLayer.on('mouseover', () => leafletLayer.openPopup());
+              leafletLayer.on('mouseout',  () => leafletLayer.closePopup());
+            }}
+          />
         ))}
       </MapContainer>
 

@@ -13,8 +13,8 @@ async function fetchLayer(layerName) {
 }
 
 export default function App() {
-  const [latitude, setLatitude] = useState('12.9720');
-  const [longitude, setLongitude] = useState('77.5950');
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState('');
   const [report, setReport] = useState(null);
   const [layers, setLayers] = useState({});
   const [loading, setLoading] = useState(false);
@@ -125,6 +125,7 @@ export default function App() {
           latitude={Number.isNaN(parsedLat) ? 12.9716 : parsedLat}
           longitude={Number.isNaN(parsedLng) ? 77.5946 : parsedLng}
           layers={layers}
+          hasPin={!Number.isNaN(parsedLat) && !Number.isNaN(parsedLng) && latitude !== '' && longitude !== ''}
         />
         <RiskCard result={report} loading={loading} error={error} />
       </section>
